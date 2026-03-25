@@ -1,0 +1,6 @@
+src/generated/**/*
+app/components/ui/**/*
+node_modules/**/*
+
+app/lib/utils.ts
+app/assets/css/tailwind.css

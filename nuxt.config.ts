@@ -2,17 +2,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt'],
+  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxt/eslint'],
   colorMode: {
-    classSuffix: ''
+    classSuffix: '',
   },
   shadcn: {
     prefix: '',
-    componentDir: '@/components/ui'
+    componentDir: '@/components/ui',
   },
   tailwindcss: {
     config: {
-      darkMode: 'class'
-    }
-  }
+      darkMode: 'class',
+    },
+  },
 })
