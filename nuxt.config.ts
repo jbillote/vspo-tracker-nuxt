@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     preset: 'Bun',
   },
   nuxtElysia: {
+    module: '#server',
     path: '/api',
   },
   shadcn: {

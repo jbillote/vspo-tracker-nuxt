@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia'
-import channels from './server/data/channels.json'
+import channels from './data/channels.json'
 
 export default () =>
   new Elysia().get('/v1/streamers', () => {
