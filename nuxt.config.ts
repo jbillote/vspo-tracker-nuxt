@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
   },
+  nitro: {
+    preset: 'Bun',
+  },
   shadcn: {
     prefix: '',
     componentDir: '@/components/ui',
