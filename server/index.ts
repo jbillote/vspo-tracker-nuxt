@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia'
-import streamersRoute from './api/v1/streamers'
+import { StreamersRoutes } from './api/v1/streamers'
+import { VideosRoutes } from './api/v1/videos'
 
-export default () => new Elysia().use(streamersRoute)
+export default () => new Elysia().use(StreamersRoutes).use(VideosRoutes)
