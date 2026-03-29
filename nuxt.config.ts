@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     module: '#server',
     path: '/api',
   },
+  runtimeConfig: {
+    holodexApiKey: '',
+  },
   shadcn: {
     prefix: '',
     componentDir: '@/components/ui',
