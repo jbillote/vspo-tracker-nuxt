@@ -73,7 +73,7 @@ export default function createVideosRoutes() {
             scheduledStart: video.start_scheduled,
             duration: video.duration,
             status: video.status,
-            thumbnail: `https://i.ytimg.com/v1/${video.id}/maxresdefault.jpg`,
+            thumbnail: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`,
             streamer: {
               id: video.channel.id,
               name: video.channel.english_name,
