@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   nitro: {
-    preset: 'Bun',
+    preset: 'vercel',
   },
   nuxtElysia: {
     module: '#server',
