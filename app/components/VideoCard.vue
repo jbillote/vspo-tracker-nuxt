@@ -43,7 +43,7 @@ defineProps<{
     </div>
     <div class="mx-2 my-2">
       <span
-        class="cursor-pointed relative z-10 line-clamp-2 inline-block max-w-64 truncate text-sm font-bold select-none"
+        class="relative z-10 line-clamp-2 inline-block max-w-64 cursor-pointer truncate text-sm font-bold select-none"
         :title="title"
       >
         {{ title }}
@@ -57,6 +57,6 @@ defineProps<{
         {{ (status === 'live' ? 'Started ' : '') + DateTime.fromISO(scheduledStart)?.toRelative() }}
       </div>
     </div>
-    <a :href="`https://youtube.com/channel/${streamer.id}`" class="relative z-10 w-fit" />
+    <a :href="url" class="absolute inset-0" />
   </div>
 </template>
