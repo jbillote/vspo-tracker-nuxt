@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: 'VSPO! Tracker',
+      title: 'VSPorte! Tracker',
     },
   },
   compatibilityDate: '2025-07-15',

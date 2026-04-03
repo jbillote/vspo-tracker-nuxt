@@ -141,5 +141,103 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Neo-Porte",
+    "branches": [
+      {
+        "name": "JP",
+        "members": [
+          {
+            "name": "Shibuya HAL",
+            "youtube": "UChLfthKoUV502J7gU9STArg"
+          },
+          {
+            "name": "Shirayuki Reid",
+            "youtube": "UCIu-aUArYq_H84dBpCAokMA"
+          },
+          {
+            "name": "Aruse Inu",
+            "youtube": "UCbBLqA4HRowpj2JuLrkig5w"
+          },
+          {
+            "name": "Hizuki Yui",
+            "youtube": "UCuk7vapXKckSw6yCGGDspDg"
+          },
+          {
+            "name": "Yozuna Niu",
+            "youtube": "UCZmUoMwjyuQ59sk5_7Tx07A"
+          },
+          {
+            "name": "Tentei Forte",
+            "youtube": "UC8hwewh9svh92E1gXvgVazg"
+          },
+          {
+            "name": "Minase",
+            "youtube": "UCEy9cYULQrC2cRlVqJPCcSw"
+          },
+          {
+            "name": "Kohaku Teto",
+            "youtube": "UCEtUOMEAuAMz8dor89rt2RA"
+          },
+          {
+            "name": "Kuga Leo",
+            "youtube": "UCmpEFsiD67ZOjn2CCJoo1mw"
+          },
+          {
+            "name": "Itoi Toi",
+            "youtube": "UCZrYHIPsKhYAXqOls2kQQNQ"
+          },
+          {
+            "name": "CEO Kazari",
+            "youtube": "UCNGMMdEgYIUR6rC44v9aZ8w"
+          },
+          {
+            "name": "Kasukano Utsuro",
+            "youtube": "UCEk1_ZVGRiVV-gxHT9wdNMg"
+          },
+          {
+            "name": "Konkon Aria",
+            "youtube": "UCo6mwsozDGMW0UNGowBJGhg"
+          },
+          {
+            "name": "Aogiri Eito",
+            "youtube": "UC4Xuz67FNRr69ILv2b7ZRBA"
+          },
+          {
+            "name": "Hiiragi Tsurugi",
+            "youtube": "UCWnQDjlXTLDyYowc3LaHyJQ"
+          },
+          {
+            "name": "Yagami Tsukumo",
+            "youtube": "UCKuwxopq9c3cldzSOo4ceSA"
+          },
+          {
+            "name": "Shirona Shizuku",
+            "youtube": "UCAHQGIKolfBfoeXXMY79SBA"
+          },
+          {
+            "name": "Asakura Shino",
+            "youtube": "UCTxoJgb4DzMd7tiM8cvf4PA"
+          },
+          {
+            "name": "Amane Amu",
+            "youtube": "UC6FprWVXuULaY9mZOcqTe4A"
+          },
+          {
+            "name": "Hiura Kuro",
+            "youtube": "UCElYE3bfzjjmJ9xwjvro9Yw"
+          },
+          {
+            "name": "Onigaya Ten",
+            "youtube": "UCv3EicDtxObcZZmnFcHvNnw"
+          },
+          {
+            "name": "Mitsuba Eni",
+            "youtube": "UCdVYY2166hyjUAMHwp2almg"
+          }
+        ]
+      }
+    ]
   }
 ]
