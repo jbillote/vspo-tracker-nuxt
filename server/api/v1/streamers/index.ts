@@ -21,12 +21,18 @@ export default function createStreamersRoutes() {
         response: t.Array(t.String()),
       },
     )
-    .get('/orgs', () => {
-      const orgs = []
-      channels.forEach((org) => {
-        orgs.push(org.name)
-      })
+    .get(
+      '/orgs',
+      () => {
+        const orgs = []
+        channels.forEach((org) => {
+          orgs.push(org.name)
+        })
 
-      return orgs
-    })
+        return orgs
+      },
+      {
+        response: t.Array(t.String()),
+      },
+    )
 }
