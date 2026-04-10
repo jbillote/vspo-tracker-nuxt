@@ -67,7 +67,7 @@ export default function createVideosRoutes() {
             title: video.title,
             type: video.type,
             videoSource: 'youtube',
-            membersOnly: video.topicId === 'membersonly',
+            membersOnly: video.topic_id === 'membersonly',
             publishedAt: video.published_at,
             availableAt: video.available_at,
             scheduledStart: video.start_scheduled,
