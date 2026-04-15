@@ -54,7 +54,18 @@ defineProps<{
         </a>
       </div>
       <div class="max-w-64 text-sm">
-        {{ (status === 'live' ? 'Started ' : '') + DateTime.fromISO(scheduledStart)?.toRelative() }}
+        <span
+          class="relative z-10 cursor-pointer select-none"
+          :title="
+            status !== 'live'
+              ? DateTime.fromISO(scheduledStart)?.toLocaleString(DateTime.DATETIME_FULL)
+              : ''
+          "
+        >
+          {{
+            (status === 'live' ? 'Started ' : '') + DateTime.fromISO(scheduledStart)?.toRelative()
+          }}
+        </span>
       </div>
     </div>
     <a :href="url" class="absolute inset-0" />
