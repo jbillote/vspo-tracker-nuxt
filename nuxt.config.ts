@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/color-mode',
     'nuxt-elysia',
+    '@pinia/nuxt',
   ],
   colorMode: {
     classSuffix: '',
