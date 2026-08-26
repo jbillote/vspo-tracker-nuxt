@@ -15,10 +15,10 @@ import { Spinner } from '@/components/ui/spinner'
 import { ListFilter } from 'lucide-vue-next'
 
 const open = ref(false)
-const streamers = ref<string[]>([])
+const streamers = ref({})
 
 watch(open, async (isOpen) => {
-  if (isOpen && !streamers.value.length) {
+  if (isOpen && !(Object.keys(streamers.value) > 0)) {
     const data = await $fetch('/api/v1/streamers')
     streamers.value = data
   }
@@ -42,11 +42,23 @@ watch(open, async (isOpen) => {
             >Filter streams by org or specific streamers.</DialogDescription
           >
         </DialogHeader>
-        <div v-if="!streamers.length" class="flex items-center justify-center">
+        <div v-if="Object.keys(streamers).length < 1" class="flex items-center justify-center">
           <Spinner />
         </div>
         <div v-else class="flex items-center justify-center">
-          <div v-for="streamer in streamers" :key="streamer">{{ streamer }}</div>
+          <Select multiple>
+            <SelectTrigger>
+              <SelectValue placeholder="Filter by streamer" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup v-for="(members, org) in streamers" :key="org">
+                <SelectLabel>{{ org }}</SelectLabel>
+                <SelectItem v-for="member in members" :key="member" :value="member">
+                  {{ member }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <DialogFooter>
           <DialogClose as-child>
