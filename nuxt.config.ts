@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxt/eslint',
     '@nuxtjs/color-mode',
-    'nuxt-elysia',
     '@pinia/nuxt',
   ],
   colorMode: {
@@ -20,10 +19,6 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'vercel',
-  },
-  nuxtElysia: {
-    module: '#server',
-    path: '/api',
   },
   runtimeConfig: {
     holodexApiKey: '',

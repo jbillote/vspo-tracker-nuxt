@@ -14,17 +14,12 @@ import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { ListFilter } from 'lucide-vue-next'
 
-const { $api } = useNuxtApp()
-
 const open = ref(false)
 const streamers = ref<string[]>([])
 
 watch(open, async (isOpen) => {
   if (isOpen && !streamers.value.length) {
-    const { data, error } = await $api.v1.streamers.get()
-    if (error) {
-      throw new Error('Unable to load data')
-    }
+    const { data } = await $fetch('/api/v1/streamers')
     streamers.value = data
   }
 })
@@ -50,7 +45,9 @@ watch(open, async (isOpen) => {
         <div v-if="!streamers.length" class="flex items-center justify-center">
           <Spinner />
         </div>
-        <div v-else class="flex items-center justify-center">Loaded</div>
+        <div v-else class="flex items-center justify-center">
+          <div v-for="streamer in streamers" :key="streamer">{{ streamer }}</div>
+        </div>
         <DialogFooter>
           <DialogClose as-child>
             <Button variant="outline">Close</Button>

@@ -2,16 +2,7 @@
 import VideoCard from '@/components/VideoCard.vue'
 import { DateTime } from 'luxon'
 
-const { $api } = useNuxtApp()
-const { data } = await useAsyncData(async () => {
-  const { data: resp, error } = await $api.v1.videos.live.get()
-
-  if (error) {
-    throw new Error('Unable to load data')
-  }
-
-  return resp
-})
+const { data } = await useFetch('/api/v1/videos/live')
 
 const upcoming = computed(() => {
   return (
