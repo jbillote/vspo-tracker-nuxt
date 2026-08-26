@@ -19,7 +19,7 @@ const streamers = ref<string[]>([])
 
 watch(open, async (isOpen) => {
   if (isOpen && !streamers.value.length) {
-    const { data } = await $fetch('/api/v1/streamers')
+    const data = await $fetch('/api/v1/streamers')
     streamers.value = data
   }
 })
