@@ -12,10 +12,22 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
-import { ListFilter } from 'lucide-vue-next'
+import { ListFilter, RefreshCw } from 'lucide-vue-next'
+import { useVideoStore } from '@/stores/videos'
 
 const open = ref(false)
 const streamers = ref({})
+const loading = ref(false)
+const videoStore = useVideoStore()
+
+async function refresh() {
+  loading.value = true
+  try {
+    await videoStore.fetch()
+  } finally {
+    loading.value = false
+  }
+}
 
 watch(open, async (isOpen) => {
   if (isOpen && !(Object.keys(streamers.value) > 0)) {
@@ -29,6 +41,10 @@ watch(open, async (isOpen) => {
   <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
     <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
     <span class="flex-auto">VSPO! Tracker</span>
+    <Button class="hover:bg-accent bg-transparent" :disabled="loading" @click="refresh">
+      <Spinner v-if="loading" />
+      <RefreshCw v-else class="text-white" />
+    </Button>
     <Dialog v-model:open="open">
       <DialogTrigger as-child>
         <Button class="hover:bg-accent bg-transparent">
