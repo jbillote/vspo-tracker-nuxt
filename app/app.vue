@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
-import { ListFilter, RefreshCw } from 'lucide-vue-next'
 import { useVideoStore } from '@/stores/videos'
+import { ListFilter, RefreshCw } from 'lucide-vue-next'
 
 const open = ref(false)
 const streamers = ref({})
