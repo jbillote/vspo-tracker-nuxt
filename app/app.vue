@@ -23,6 +23,7 @@ const videoStore = useVideoStore()
 async function refresh() {
   loading.value = true
   try {
+    videoStore.clear()
     await videoStore.fetch()
   } finally {
     loading.value = false
