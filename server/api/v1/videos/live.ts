@@ -17,10 +17,42 @@ const getYouTubeIDs = (): string[] => {
   return ids
 }
 
-export default defineEventHandler(async () => {
+const getYouTubeIDsForChannels = (names: string[]): string[] => {
+  const wanted = new Set(names.map((name) => name.toLowerCase()))
+  const ids: string[] = []
+
+  for (const org of channels) {
+    for (const branch of org.branches) {
+      for (const member of branch.members) {
+        if (wanted.has(member.name.toLowerCase())) {
+          ids.push(member.youtube)
+        }
+      }
+    }
+  }
+
+  return ids
+}
+
+export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
-  const ids = getYouTubeIDs()
+  const query = getQuery(event)
+  const channelsParam = query.channels
+
+  const requestedNames = (
+    Array.isArray(channelsParam)
+      ? channelsParam
+      : typeof channelsParam === 'string'
+        ? channelsParam.split(',')
+        : []
+  )
+    .map((name) => name.trim())
+    .filter(Boolean)
+
+  const filteredIds = requestedNames.length > 0 ? getYouTubeIDsForChannels(requestedNames) : []
+
+  const ids = filteredIds.length > 0 ? filteredIds : getYouTubeIDs()
   const url = `https://holodex.net/api/v2/users/live?channels=${ids.join(',')}&includePlaceholder=true`
 
   const resp = await fetch(url, {
