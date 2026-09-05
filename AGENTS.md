@@ -7,7 +7,8 @@ Nuxt 4 app ("VSPorte! Tracker"). Package manager is **bun** (bun.lock, bun is in
 - `bun install` then dev server on http://localhost:3000: `bun run dev`
 - `bun run lint` (eslint, Nuxt-aware autoimport config); `bun run format` (prettier, auto-sorts imports and Tailwind classes)
 - `bun run build` (Nitro, Vercel preset); `bun run preview` to preview a local build
-- There is **no unit test suite**. `tests/performance/*.ts` are autocannon load scripts — they require a running server:
+- `bun run test` (Vitest, unit tests in `tests/unit/`); `bun run test:watch`; `bun run test:coverage`
+- `tests/performance/*.ts` are autocannon load scripts, not unit tests — they require a running server:
   `BASE_URL=http://localhost:3000 bun run tests/performance/live.ts`
 - No `typecheck` script; the root tsconfig only references generated files in `.nuxt/` (created by `nuxt prepare` on install).
 
@@ -18,3 +19,4 @@ Nuxt 4 app ("VSPorte! Tracker"). Package manager is **bun** (bun.lock, bun is in
 - `app/components/ui/**` is shadcn-vue managed output: excluded from eslint and prettier; add/update components via shadcn (`components.json`), don't reformat or hand-lint them.
 - Streamer/org data is static: `server/data/channels.json` drives both `/api/v1/streamers` and the channel list used by the live endpoint.
 - `.env` contains a stale Prisma comment block — there is no Prisma/DB in this repo.
+- Source files rely on Nuxt/Nitro auto-imports (`ref`, `defineStore`, `defineEventHandler`, `getQuery`, `useRuntimeConfig`) with no explicit `import` statements. `tests/unit/setup.ts` and the individual server test files `vi.stubGlobal(...)` these before importing the module under test, instead of booting a full Nuxt/Nitro test environment.
