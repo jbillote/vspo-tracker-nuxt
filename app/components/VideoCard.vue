@@ -49,7 +49,12 @@ defineProps<{
         {{ title }}
       </span>
       <div v-if="streamer" class="w-fit text-sm hover:text-sky-300">
-        <a :href="`https://youtube.com/channel/${streamer.id}`" class="relative z-10 w-fit">
+        <a
+          :href="`https://youtube.com/channel/${streamer.id}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="relative z-10 w-fit"
+        >
           {{ streamer.name }}
         </a>
       </div>
@@ -70,6 +75,6 @@ defineProps<{
         </ClientOnly>
       </div>
     </div>
-    <a :href="url" class="absolute inset-0" />
+    <a :href="url" target="_blank" rel="noopener noreferrer" class="absolute inset-0" />
   </div>
 </template>
