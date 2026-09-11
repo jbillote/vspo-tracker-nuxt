@@ -12,8 +12,11 @@ videoStore.fetch()
   <div>
     <h1 class="mt-2 text-center text-4xl font-bold">Live</h1>
     <div class="flex flex-wrap justify-center p-2">
-      <div v-if="videoStore.live.length < 1" class="flex items-center justify-center p-2">
+      <div v-if="videoStore.loading" class="flex items-center justify-center p-2">
         <Spinner />
+      </div>
+      <div v-else-if="videoStore.live.length < 1" class="flex items-center justify-center p-2">
+        No one live :c
       </div>
       <div v-else class="flex flex-wrap justify-center p-2">
         <VideoCard v-for="video in videoStore.live" :key="video.url" v-bind="video" />
@@ -21,8 +24,11 @@ videoStore.fetch()
     </div>
     <h1 class="mt-2 text-center text-4xl font-bold">Upcoming</h1>
     <div class="flex flex-wrap justify-center p-2">
-      <div v-if="videoStore.upcoming.length < 1" class="flex items-center justify-center p-2">
+      <div v-if="videoStore.loading" class="flex items-center justify-center p-2">
         <Spinner />
+      </div>
+      <div v-else-if="videoStore.upcoming.length < 1" class="flex items-center justify-center p-2">
+        No upcoming streams :c
       </div>
       <div v-else class="flex flex-wrap justify-center p-2">
         <VideoCard v-for="video in videoStore.upcoming" :key="video.url" v-bind="video" />

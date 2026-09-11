@@ -17,6 +17,35 @@ describe('useVideoStore', () => {
     const store = useVideoStore()
     expect(store.live).toEqual([])
     expect(store.upcoming).toEqual([])
+    expect(store.loading).toBe(false)
+  })
+
+  it('sets loading while the fetch is in flight and clears it when done', async () => {
+    let resolveFetch
+    fetchMock.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveFetch = resolve
+      }),
+    )
+
+    const store = useVideoStore()
+    const fetchPromise = store.fetch()
+
+    expect(store.loading).toBe(true)
+
+    resolveFetch({ live: [], upcoming: [] })
+    await fetchPromise
+
+    expect(store.loading).toBe(false)
+  })
+
+  it('clears loading even when the fetch rejects', async () => {
+    fetchMock.mockRejectedValueOnce(new Error('network error'))
+
+    const store = useVideoStore()
+    await expect(store.fetch()).rejects.toThrow('network error')
+
+    expect(store.loading).toBe(false)
   })
 
   it('populates live and upcoming from the API response', async () => {

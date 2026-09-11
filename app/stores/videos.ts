@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 export const useVideoStore = defineStore('videos', () => {
   const live = ref([])
   const upcoming = ref([])
+  const loading = ref(false)
 
   function clear() {
     live.value = []
@@ -10,14 +11,19 @@ export const useVideoStore = defineStore('videos', () => {
   }
 
   async function fetch() {
-    const res = await $fetch('/api/v1/videos/live')
-    live.value = res.live
-    upcoming.value =
-      res.upcoming?.filter(
-        (video) =>
-          video.scheduledStart && DateTime.fromISO(video.scheduledStart).diffNow('days').days < 2,
-      ) ?? []
+    loading.value = true
+    try {
+      const res = await $fetch('/api/v1/videos/live')
+      live.value = res.live
+      upcoming.value =
+        res.upcoming?.filter(
+          (video) =>
+            video.scheduledStart && DateTime.fromISO(video.scheduledStart).diffNow('days').days < 2,
+        ) ?? []
+    } finally {
+      loading.value = false
+    }
   }
 
-  return { live, upcoming, clear, fetch }
+  return { live, upcoming, loading, clear, fetch }
 })
