@@ -20,12 +20,7 @@ describe('GET /api/v1/streamers', () => {
 
   it('keys the result by "org branch" when the org has multiple branches', async () => {
     const result = await handler()
-    const multiBranchOrg = channels.find((org) => org.branches.length > 1)
-
-    if (!multiBranchOrg) {
-      // channels.json currently has no multi-branch org to exercise this path
-      return
-    }
+    const multiBranchOrg = channels.find((org) => org.branches.length > 1)!
 
     for (const branch of multiBranchOrg.branches) {
       expect(result[`${multiBranchOrg.name} ${branch.name}`]).toEqual(
