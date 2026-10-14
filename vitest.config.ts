@@ -16,6 +16,9 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       include: ['app/stores/**', 'server/**'],
+      thresholds: {
+        100: true,
+      },
     },
   },
 })
