@@ -69,6 +69,16 @@ describe('GET /api/v1/videos/live', () => {
     expect(url).toContain(CHANNEL_B.id)
   })
 
+  it('supports a repeated channels query param (array)', async () => {
+    getQueryMock.mockReturnValue({ channels: [CHANNEL_A.name, ` ${CHANNEL_B.name} `] })
+    mockHolodexResponse([])
+    await handler({})
+
+    const url = fetchMock.mock.calls[0][0] as string
+    expect(url).toContain(CHANNEL_A.id)
+    expect(url).toContain(CHANNEL_B.id)
+  })
+
   it('falls back to all channels when the channels filter matches nobody', async () => {
     getQueryMock.mockReturnValue({ channels: 'Someone Who Does Not Exist' })
     mockHolodexResponse([])
@@ -280,6 +290,28 @@ describe('GET /api/v1/videos/live', () => {
         title: 'Earlier',
         channel: { id: CHANNEL_A.id, english_name: CHANNEL_A.name },
       },
+      {
+        id: 'upcoming-later',
+        type: 'stream',
+        topic_id: 'singing',
+        status: 'upcoming',
+        published_at: '2026-01-01T00:00:00Z',
+        available_at: '2026-01-04T00:00:00Z',
+        duration: 0,
+        title: 'Upcoming later',
+        channel: { id: CHANNEL_A.id, english_name: CHANNEL_A.name },
+      },
+      {
+        id: 'upcoming-earlier',
+        type: 'stream',
+        topic_id: 'singing',
+        status: 'upcoming',
+        published_at: '2026-01-01T00:00:00Z',
+        available_at: '2026-01-03T00:00:00Z',
+        duration: 0,
+        title: 'Upcoming earlier',
+        channel: { id: CHANNEL_A.id, english_name: CHANNEL_A.name },
+      },
     ])
 
     const result = await handler({})
@@ -287,6 +319,10 @@ describe('GET /api/v1/videos/live', () => {
     expect(result.live.map((v: { url: string }) => v.url)).toEqual([
       'https://youtube.com/watch?v=earlier',
       'https://youtube.com/watch?v=later',
+    ])
+    expect(result.upcoming.map((v: { url: string }) => v.url)).toEqual([
+      'https://youtube.com/watch?v=upcoming-earlier',
+      'https://youtube.com/watch?v=upcoming-later',
     ])
   })
 })
