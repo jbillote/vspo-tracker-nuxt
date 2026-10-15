@@ -34,11 +34,30 @@ const getYouTubeIDsForChannels = (names: string[]): string[] => {
   return ids
 }
 
+const parseBooleanParam = (value: unknown, defaultValue: boolean): boolean => {
+  const raw = Array.isArray(value) ? value[value.length - 1] : value
+  if (typeof raw !== 'string') {
+    return defaultValue
+  }
+
+  const normalized = raw.trim().toLowerCase()
+  if (normalized === 'false' || normalized === '0') {
+    return false
+  }
+  if (normalized === 'true' || normalized === '1' || normalized === '') {
+    return true
+  }
+
+  return defaultValue
+}
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
   const query = getQuery(event)
   const channelsParam = query.channels
+  const includeTwitch = parseBooleanParam(query.twitch, true)
+  const includeUpcoming = parseBooleanParam(query.upcoming, true)
 
   const requestedNames = (
     Array.isArray(channelsParam)
@@ -53,7 +72,7 @@ export default defineEventHandler(async (event) => {
   const filteredIds = requestedNames.length > 0 ? getYouTubeIDsForChannels(requestedNames) : []
 
   const ids = filteredIds.length > 0 ? filteredIds : getYouTubeIDs()
-  const url = `https://holodex.net/api/v2/users/live?channels=${ids.join(',')}&includePlaceholder=true`
+  const url = `https://holodex.net/api/v2/users/live?channels=${ids.join(',')}&includePlaceholder=${includeTwitch}`
 
   const resp = await fetch(url, {
     headers: { 'x-apikey': config.holodexApiKey },
@@ -66,6 +85,10 @@ export default defineEventHandler(async (event) => {
 
   for (const video of respJson) {
     if (video.type === 'placeholder') {
+      if (!includeTwitch) {
+        continue
+      }
+
       if (video.placeholderType === 'external-stream' && ids.includes(video.channel.id)) {
         const v: Video = {
           url: video.link,
@@ -89,7 +112,11 @@ export default defineEventHandler(async (event) => {
           live.push(v)
         }
       }
-    } else if (video.topic_id !== 'FreeChat' && ids.includes(video.channel.id)) {
+    } else if (
+      video.topic_id !== 'FreeChat' &&
+      ids.includes(video.channel.id) &&
+      (includeUpcoming || video.status === 'live')
+    ) {
       const v: Video = {
         url: `https://youtube.com/watch?v=${video.id}`,
         title: video.title,
