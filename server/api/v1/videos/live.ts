@@ -112,7 +112,11 @@ export default defineEventHandler(async (event) => {
           live.push(v)
         }
       }
-    } else if (video.topic_id !== 'FreeChat' && ids.includes(video.channel.id)) {
+    } else if (
+      video.topic_id !== 'FreeChat' &&
+      ids.includes(video.channel.id) &&
+      (includeUpcoming || video.status === 'live')
+    ) {
       const v: Video = {
         url: `https://youtube.com/watch?v=${video.id}`,
         title: video.title,
@@ -133,7 +137,7 @@ export default defineEventHandler(async (event) => {
 
       if (v.status === 'live') {
         live.push(v)
-      } else if (includeUpcoming) {
+      } else {
         upcoming.push(v)
       }
     }
