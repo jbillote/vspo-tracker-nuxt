@@ -266,6 +266,105 @@ describe('GET /api/v1/videos/live', () => {
     expect(result.live).toHaveLength(0)
   })
 
+  describe('twitch and upcoming query params', () => {
+    const twitchPlaceholder = {
+      type: 'placeholder',
+      placeholderType: 'external-stream',
+      link: 'https://twitch.tv/example',
+      title: 'Twitch stream',
+      start_actual: '2026-01-01T00:00:00Z',
+      duration: 0,
+      status: 'live',
+      thumbnail: 'https://example.com/thumb.jpg',
+      channel: { id: CHANNEL_A.id, english_name: CHANNEL_A.name },
+    }
+    const youtubeLive = {
+      id: 'yt-live',
+      type: 'stream',
+      topic_id: 'singing',
+      status: 'live',
+      published_at: '2026-01-01T00:00:00Z',
+      available_at: '2026-01-01T00:00:00Z',
+      duration: 0,
+      title: 'Live stream',
+      channel: { id: CHANNEL_A.id, english_name: CHANNEL_A.name },
+    }
+    const youtubeUpcoming = {
+      ...youtubeLive,
+      id: 'yt-upcoming',
+      status: 'upcoming',
+      available_at: '2026-01-02T00:00:00Z',
+      title: 'Upcoming stream',
+    }
+
+    it('includes twitch and upcoming by default', async () => {
+      mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+      const result = await handler({})
+
+      expect(fetchMock.mock.calls[0][0]).toContain('includePlaceholder=true')
+      expect(result.live).toHaveLength(2)
+      expect(result.upcoming).toHaveLength(1)
+    })
+
+    it.each(['true', '1', ''])('includes everything when both are %j', async (value) => {
+      getQueryMock.mockReturnValue({ twitch: value, upcoming: value })
+      mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+      const result = await handler({})
+
+      expect(result.live).toHaveLength(2)
+      expect(result.upcoming).toHaveLength(1)
+    })
+
+    it.each(['false', 'FALSE', '0'])('excludes twitch streams when twitch=%s', async (value) => {
+      getQueryMock.mockReturnValue({ twitch: value })
+      mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+      const result = await handler({})
+
+      expect(fetchMock.mock.calls[0][0]).toContain('includePlaceholder=false')
+      expect(result.live).toHaveLength(1)
+      expect(result.live[0]).toMatchObject({ videoSource: 'youtube' })
+      expect(result.upcoming).toHaveLength(1)
+    })
+
+    it.each(['false', 'False', '0'])(
+      'excludes upcoming streams when upcoming=%s',
+      async (value) => {
+        getQueryMock.mockReturnValue({ upcoming: value })
+        mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+        const result = await handler({})
+
+        expect(result.live).toHaveLength(2)
+        expect(result.upcoming).toEqual([])
+      },
+    )
+
+    it('excludes both when both are false', async () => {
+      getQueryMock.mockReturnValue({ twitch: 'false', upcoming: 'false' })
+      mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+      const result = await handler({})
+
+      expect(result.live).toHaveLength(1)
+      expect(result.upcoming).toEqual([])
+    })
+
+    it('falls back to the default for unrecognized values', async () => {
+      getQueryMock.mockReturnValue({ twitch: 'nope', upcoming: 'maybe' })
+      mockHolodexResponse([twitchPlaceholder, youtubeLive, youtubeUpcoming])
+      const result = await handler({})
+
+      expect(result.live).toHaveLength(2)
+      expect(result.upcoming).toHaveLength(1)
+    })
+
+    it('uses the last value when a param is repeated', async () => {
+      getQueryMock.mockReturnValue({ twitch: ['true', 'false'] })
+      mockHolodexResponse([twitchPlaceholder, youtubeLive])
+      const result = await handler({})
+
+      expect(result.live).toHaveLength(1)
+    })
+  })
+
   it('sorts both live and upcoming ascending by availableAt', async () => {
     mockHolodexResponse([
       {
