@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
+import VideoCard from '@/components/VideoCard.vue'
 import { useVideoStore } from '@/stores/videos'
 import { ListFilter, Plus, RefreshCw } from 'lucide-vue-next'
 
@@ -20,6 +21,8 @@ const isMultiStream = computed(() => route.path === '/multi')
 
 const open = ref(false)
 const multiStreamOpen = ref(false)
+const liveYouTube = ref([])
+const liveYouTubeLoading = ref(false)
 const streamers = ref({})
 const loading = ref(false)
 const videoStore = useVideoStore()
@@ -40,6 +43,20 @@ watch(open, async (isOpen) => {
     streamers.value = data
   }
 })
+
+watch(multiStreamOpen, async (isOpen) => {
+  if (!isOpen) return
+
+  liveYouTubeLoading.value = true
+  try {
+    const data = await $fetch('/api/v1/videos/live', {
+      query: { twitch: false, upcoming: false },
+    })
+    liveYouTube.value = data.live
+  } finally {
+    liveYouTubeLoading.value = false
+  }
+})
 </script>
 
 <template>
@@ -52,13 +69,22 @@ watch(open, async (isOpen) => {
           <Plus class="text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent class="sm:max-w-[425px]">
+      <DialogContent class="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Streams</DialogTitle>
           <DialogDescription class="sr-only"
             >Change the streams shown on this page.</DialogDescription
           >
         </DialogHeader>
+        <div v-if="liveYouTubeLoading" class="flex items-center justify-center p-2">
+          <Spinner />
+        </div>
+        <div v-else-if="liveYouTube.length < 1" class="flex items-center justify-center p-2">
+          No one live :c
+        </div>
+        <div v-else class="flex flex-wrap justify-center">
+          <VideoCard v-for="video in liveYouTube" :key="video.url" v-bind="video" />
+        </div>
         <DialogFooter>
           <DialogClose as-child>
             <Button variant="outline">Close</Button>
