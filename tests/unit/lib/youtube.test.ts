@@ -38,7 +38,7 @@ describe('parseVideoIds', () => {
     ])
   })
 
-  it('handles a repeated query parameter', () => {
+  it('collects IDs from an array query value, ignoring null entries', () => {
     expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw', null])).toEqual([
       'dQw4w9WgXcQ',
       'jNQXAC9IVRw',
