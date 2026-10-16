@@ -46,6 +46,10 @@ describe('parseVideoIds', () => {
     expect(parseVideoIds([null, 'dQw4w9WgXcQ', null])).toEqual(['dQw4w9WgXcQ'])
   })
 
+  it('ignores undefined entries in an array query value', () => {
+    expect(parseVideoIds([undefined, 'dQw4w9WgXcQ', undefined])).toEqual(['dQw4w9WgXcQ'])
+  })
+
   it('returns an empty list for a missing query', () => {
     expect(parseVideoIds(undefined)).toEqual([])
     expect(parseVideoIds(null)).toEqual([])
