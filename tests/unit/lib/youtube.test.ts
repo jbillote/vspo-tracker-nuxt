@@ -1,4 +1,4 @@
-import { embedUrl, isValidVideoId, parseVideoIds } from '@/lib/youtube'
+import { embedUrl, isValidVideoId, parseVideoIds, videoIdFromUrl } from '@/lib/youtube'
 import { describe, expect, it } from 'vitest'
 
 describe('isValidVideoId', () => {
@@ -94,6 +94,24 @@ describe('parseVideoIds', () => {
   it('returns an empty list for a missing query', () => {
     expect(parseVideoIds(undefined)).toEqual([])
     expect(parseVideoIds(null)).toEqual([])
+  })
+})
+
+describe('videoIdFromUrl', () => {
+  it('extracts the ID from a watch URL', () => {
+    expect(videoIdFromUrl('https://youtube.com/watch?v=dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ')
+  })
+
+  it('returns undefined when the URL has no v parameter', () => {
+    expect(videoIdFromUrl('https://youtube.com/channel/UC1234567890')).toBeUndefined()
+  })
+
+  it('returns undefined when the v parameter is not a valid ID', () => {
+    expect(videoIdFromUrl('https://youtube.com/watch?v=nope')).toBeUndefined()
+  })
+
+  it('returns undefined for a string that is not a URL', () => {
+    expect(videoIdFromUrl('not a url')).toBeUndefined()
   })
 })
 

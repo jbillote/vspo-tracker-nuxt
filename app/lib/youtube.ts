@@ -19,6 +19,17 @@ export function parseVideoIds(query: unknown): string[] {
   return [...new Set(ids)]
 }
 
+// Extracts the video ID from a YouTube watch URL, or returns undefined if the
+// URL has no valid ID.
+export function videoIdFromUrl(url: string): string | undefined {
+  try {
+    const id = new URL(url).searchParams.get('v')
+    return id && isValidVideoId(id) ? id : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export function embedUrl(id: string): string {
   return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1`
 }

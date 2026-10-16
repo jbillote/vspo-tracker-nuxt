@@ -13,6 +13,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import VideoCard from '@/components/VideoCard.vue'
+import { videoIdFromUrl } from '@/lib/youtube'
 import { useVideoStore } from '@/stores/videos'
 import { ListFilter, Plus, RefreshCw } from 'lucide-vue-next'
 
@@ -23,6 +24,7 @@ const open = ref(false)
 const multiStreamOpen = ref(false)
 const liveYouTube = ref([])
 const liveYouTubeLoading = ref(false)
+const selectedVideoIds = ref<string[]>([])
 const streamers = ref({})
 const loading = ref(false)
 const videoStore = useVideoStore()
@@ -44,8 +46,25 @@ watch(open, async (isOpen) => {
   }
 })
 
+function isSelected(url: string) {
+  const id = videoIdFromUrl(url)
+  return id !== undefined && selectedVideoIds.value.includes(id)
+}
+
+function toggleSelected(url: string) {
+  const id = videoIdFromUrl(url)
+  if (id === undefined) return
+
+  selectedVideoIds.value = selectedVideoIds.value.includes(id)
+    ? selectedVideoIds.value.filter((selected) => selected !== id)
+    : [...selectedVideoIds.value, id]
+}
+
 watch(multiStreamOpen, async (isOpen) => {
-  if (!isOpen) return
+  if (!isOpen) {
+    selectedVideoIds.value = []
+    return
+  }
 
   liveYouTubeLoading.value = true
   try {
@@ -84,7 +103,14 @@ watch(multiStreamOpen, async (isOpen) => {
             No one live :c
           </div>
           <div v-else class="flex flex-wrap justify-center">
-            <VideoCard v-for="video in liveYouTube" :key="video.url" v-bind="video" />
+            <VideoCard
+              v-for="video in liveYouTube"
+              :key="video.url"
+              v-bind="video"
+              selectable
+              :selected="isSelected(video.url)"
+              @select="toggleSelected(video.url)"
+            />
           </div>
         </div>
         <DialogFooter class="shrink-0 border-t pt-4">
