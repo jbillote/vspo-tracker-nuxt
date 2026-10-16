@@ -69,23 +69,25 @@ watch(multiStreamOpen, async (isOpen) => {
           <Plus class="text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent class="max-h-[90vh] max-w-[80vw] overflow-y-auto sm:max-w-[80vw]">
-        <DialogHeader>
+      <DialogContent class="flex max-h-[90vh] max-w-[80vw] flex-col sm:max-w-[80vw]">
+        <DialogHeader class="shrink-0">
           <DialogTitle>Streams</DialogTitle>
           <DialogDescription class="sr-only"
             >Change the streams shown on this page.</DialogDescription
           >
         </DialogHeader>
-        <div v-if="liveYouTubeLoading" class="flex items-center justify-center p-2">
-          <Spinner />
+        <div class="min-h-0 flex-1 overflow-y-auto">
+          <div v-if="liveYouTubeLoading" class="flex items-center justify-center p-2">
+            <Spinner />
+          </div>
+          <div v-else-if="liveYouTube.length < 1" class="flex items-center justify-center p-2">
+            No one live :c
+          </div>
+          <div v-else class="flex flex-wrap justify-center">
+            <VideoCard v-for="video in liveYouTube" :key="video.url" v-bind="video" />
+          </div>
         </div>
-        <div v-else-if="liveYouTube.length < 1" class="flex items-center justify-center p-2">
-          No one live :c
-        </div>
-        <div v-else class="flex flex-wrap justify-center">
-          <VideoCard v-for="video in liveYouTube" :key="video.url" v-bind="video" />
-        </div>
-        <DialogFooter>
+        <DialogFooter class="shrink-0 border-t pt-4">
           <DialogClose as-child>
             <Button variant="outline">Close</Button>
           </DialogClose>
