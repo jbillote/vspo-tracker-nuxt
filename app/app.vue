@@ -69,7 +69,7 @@ watch(multiStreamOpen, async (isOpen) => {
           <Plus class="text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent class="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
+      <DialogContent class="max-h-[90vh] max-w-[80vw] overflow-y-auto sm:max-w-[80vw]">
         <DialogHeader>
           <DialogTitle>Streams</DialogTitle>
           <DialogDescription class="sr-only"
