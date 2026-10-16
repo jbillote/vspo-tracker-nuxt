@@ -13,9 +13,13 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { useVideoStore } from '@/stores/videos'
-import { ListFilter, RefreshCw } from 'lucide-vue-next'
+import { ListFilter, Plus, RefreshCw } from 'lucide-vue-next'
+
+const route = useRoute()
+const isMultiStream = computed(() => route.path === '/multi')
 
 const open = ref(false)
+const multiStreamOpen = ref(false)
 const streamers = ref({})
 const loading = ref(false)
 const videoStore = useVideoStore()
@@ -42,41 +46,19 @@ watch(open, async (isOpen) => {
   <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
     <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
     <span class="flex-auto">VSPO! Tracker</span>
-    <Button class="hover:bg-accent bg-transparent" :disabled="loading" @click="refresh">
-      <Spinner v-if="loading" />
-      <RefreshCw v-else class="text-white" />
-    </Button>
-    <Dialog v-model:open="open">
+    <Dialog v-if="isMultiStream" v-model:open="multiStreamOpen">
       <DialogTrigger as-child>
         <Button class="hover:bg-accent bg-transparent">
-          <ListFilter class="text-white" />
+          <Plus class="text-white" />
         </Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Filter</DialogTitle>
+          <DialogTitle>Streams</DialogTitle>
           <DialogDescription class="sr-only"
-            >Filter streams by org or specific streamers.</DialogDescription
+            >Change the streams shown on this page.</DialogDescription
           >
         </DialogHeader>
-        <div v-if="Object.keys(streamers).length < 1" class="flex items-center justify-center">
-          <Spinner />
-        </div>
-        <div v-else class="flex items-center justify-center">
-          <Select multiple>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by streamer" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup v-for="(members, org) in streamers" :key="org">
-                <SelectLabel>{{ org }}</SelectLabel>
-                <SelectItem v-for="member in members" :key="member" :value="member">
-                  {{ member }}
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
         <DialogFooter>
           <DialogClose as-child>
             <Button variant="outline">Close</Button>
@@ -84,6 +66,50 @@ watch(open, async (isOpen) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+    <template v-else>
+      <Button class="hover:bg-accent bg-transparent" :disabled="loading" @click="refresh">
+        <Spinner v-if="loading" />
+        <RefreshCw v-else class="text-white" />
+      </Button>
+      <Dialog v-model:open="open">
+        <DialogTrigger as-child>
+          <Button class="hover:bg-accent bg-transparent">
+            <ListFilter class="text-white" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent class="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Filter</DialogTitle>
+            <DialogDescription class="sr-only"
+              >Filter streams by org or specific streamers.</DialogDescription
+            >
+          </DialogHeader>
+          <div v-if="Object.keys(streamers).length < 1" class="flex items-center justify-center">
+            <Spinner />
+          </div>
+          <div v-else class="flex items-center justify-center">
+            <Select multiple>
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by streamer" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup v-for="(members, org) in streamers" :key="org">
+                  <SelectLabel>{{ org }}</SelectLabel>
+                  <SelectItem v-for="member in members" :key="member" :value="member">
+                    {{ member }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <DialogFooter>
+            <DialogClose as-child>
+              <Button variant="outline">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </template>
   </header>
   <div class="flex flex-1 flex-col gap-4 p-4">
     <NuxtPage />
