@@ -38,11 +38,12 @@ describe('parseVideoIds', () => {
     ])
   })
 
-  it('collects IDs from an array query value, ignoring null entries', () => {
-    expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw', null])).toEqual([
-      'dQw4w9WgXcQ',
-      'jNQXAC9IVRw',
-    ])
+  it('collects IDs from an array query value', () => {
+    expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw'])).toEqual(['dQw4w9WgXcQ', 'jNQXAC9IVRw'])
+  })
+
+  it('ignores null entries in an array query value', () => {
+    expect(parseVideoIds([null, 'dQw4w9WgXcQ', null])).toEqual(['dQw4w9WgXcQ'])
   })
 
   it('returns an empty list for a missing query', () => {
