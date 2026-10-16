@@ -42,12 +42,53 @@ describe('parseVideoIds', () => {
     expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw'])).toEqual(['dQw4w9WgXcQ', 'jNQXAC9IVRw'])
   })
 
-  it('ignores null entries in an array query value', () => {
-    expect(parseVideoIds([null, 'dQw4w9WgXcQ', null])).toEqual(['dQw4w9WgXcQ'])
+  it('ignores null at the start of an array query value', () => {
+    expect(parseVideoIds([null, 'dQw4w9WgXcQ', 'jNQXAC9IVRw'])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
   })
 
-  it('ignores undefined entries in an array query value', () => {
-    expect(parseVideoIds([undefined, 'dQw4w9WgXcQ', undefined])).toEqual(['dQw4w9WgXcQ'])
+  it('ignores null in the middle of an array query value', () => {
+    expect(parseVideoIds(['dQw4w9WgXcQ', null, 'jNQXAC9IVRw'])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
+  })
+
+  it('ignores null at the end of an array query value', () => {
+    expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw', null])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
+  })
+
+  it('ignores undefined at the start of an array query value', () => {
+    expect(parseVideoIds([undefined, 'dQw4w9WgXcQ', 'jNQXAC9IVRw'])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
+  })
+
+  it('ignores undefined in the middle of an array query value', () => {
+    expect(parseVideoIds(['dQw4w9WgXcQ', undefined, 'jNQXAC9IVRw'])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
+  })
+
+  it('ignores undefined at the end of an array query value', () => {
+    expect(parseVideoIds(['dQw4w9WgXcQ', 'jNQXAC9IVRw', undefined])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
+  })
+
+  it('ignores both null and undefined in the same array query value', () => {
+    expect(parseVideoIds([null, 'dQw4w9WgXcQ', undefined, 'jNQXAC9IVRw', null])).toEqual([
+      'dQw4w9WgXcQ',
+      'jNQXAC9IVRw',
+    ])
   })
 
   it('returns an empty list for a missing query', () => {
