@@ -18,6 +18,7 @@ import { useVideoStore } from '@/stores/videos'
 import { ListFilter, Plus, RefreshCw } from 'lucide-vue-next'
 
 const route = useRoute()
+const router = useRouter()
 const isMultiStream = computed(() => route.path === '/multi')
 
 const open = ref(false)
@@ -58,6 +59,13 @@ function toggleSelected(url: string) {
   selectedVideoIds.value = selectedVideoIds.value.includes(id)
     ? selectedVideoIds.value.filter((selected) => selected !== id)
     : [...selectedVideoIds.value, id]
+}
+
+async function confirmSelection() {
+  if (selectedVideoIds.value.length > 0) {
+    await router.push({ path: '/multi', query: { ids: selectedVideoIds.value.join(',') } })
+  }
+  multiStreamOpen.value = false
 }
 
 watch(multiStreamOpen, async (isOpen) => {
@@ -114,9 +122,7 @@ watch(multiStreamOpen, async (isOpen) => {
           </div>
         </div>
         <DialogFooter class="shrink-0 border-t pt-4">
-          <DialogClose as-child>
-            <Button variant="outline">Close</Button>
-          </DialogClose>
+          <Button variant="outline" @click="confirmSelection">Confirm</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
