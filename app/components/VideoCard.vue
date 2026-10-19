@@ -3,6 +3,8 @@ import { DateTime } from 'luxon'
 import { TwitchIcon } from 'vue3-simple-icons'
 
 defineProps<{
+  selectable?: boolean
+  selected?: boolean
   url: string
   title: string
   type: string
@@ -19,10 +21,17 @@ defineProps<{
       }
     | undefined
 }>()
+
+defineEmits<{
+  select: []
+}>()
 </script>
 
 <template>
-  <div class="bg-accent relative m-1 inline-block rounded-md hover:bg-neutral-700">
+  <div
+    class="bg-accent relative m-1 inline-block rounded-md hover:bg-neutral-700"
+    :class="{ 'bg-neutral-700 ring-2 ring-sky-400': selected }"
+  >
     <div
       :style="{ backgroundImage: `url(${thumbnail})` }"
       class="h-36 w-68 rounded-md bg-cover bg-center bg-no-repeat"
@@ -75,6 +84,14 @@ defineProps<{
         </ClientOnly>
       </div>
     </div>
-    <a :href="url" target="_blank" rel="noopener noreferrer" class="absolute inset-0" />
+    <button
+      v-if="selectable"
+      type="button"
+      :aria-pressed="selected"
+      :aria-label="title"
+      class="absolute inset-0 z-20 cursor-pointer rounded-md"
+      @click="$emit('select')"
+    />
+    <a v-else :href="url" target="_blank" rel="noopener noreferrer" class="absolute inset-0" />
   </div>
 </template>
