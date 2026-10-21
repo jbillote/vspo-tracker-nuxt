@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LiveCard from '@/components/LiveCard.vue'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
-import VideoCard from '@/components/VideoCard.vue'
 import { videoIdFromUrl } from '@/lib/youtube'
 import { useVideoStore } from '@/stores/videos'
 import { ListFilter, Plus, RefreshCw } from 'lucide-vue-next'
@@ -111,11 +111,10 @@ watch(multiStreamOpen, async (isOpen) => {
             No one live :c
           </div>
           <div v-else class="flex flex-wrap justify-center">
-            <VideoCard
+            <LiveCard
               v-for="video in liveYouTube"
               :key="video.url"
               v-bind="video"
-              selectable
               :selected="isSelected(video.url)"
               @select="toggleSelected(video.url)"
             />
